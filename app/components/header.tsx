@@ -1,15 +1,15 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export default function Header() {
   return (
-    <div className="w-full flex justify-between p-2">
-      <span className="text-2xl">Todo</span>
+    <div className="w-full flex justify-between p-2 bg-[#080808] select-none">
+      <span className="text-2xl">Todo app</span>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-1">
         <Avatar>
-          <AvatarFallback>U</AvatarFallback>
+          <AvatarFallback>VN</AvatarFallback>
         </Avatar>
-        <span>Uživatel</span>
+        <span>Vojtěch Nerad</span>
       </div>
     </div>
   );
