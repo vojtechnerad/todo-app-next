@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Todo {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   title String
   notes     String?
   isCompleted Boolean @default(false)
