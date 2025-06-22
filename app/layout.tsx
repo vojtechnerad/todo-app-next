@@ -4,7 +4,6 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Header from './components/header';
 import TodoList from './components/todo-list';
-import TodoToolbar from './components/todo-toolbar';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,10 +44,7 @@ export default function RootLayout({
                 <div className="flex w-full max-w-full h-full">
                   {/* První sloupec - max 300px */}
                   <div className="max-w-[300px] w-full h-full flex flex-col">
-                    <TodoToolbar />
-                    <div className="flex-grow overflow-auto">
-                      <TodoList />
-                    </div>
+                    <TodoList />
                   </div>
 
                   {/* Druhý sloupec - zbytek */}
