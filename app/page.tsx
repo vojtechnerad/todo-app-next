@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button";
+import NoTodoSelected from './components/no-todo-selected';
 
 export default function Home() {
-  return (
-    <div>
-      <Button>aaaaa</Button>
-    </div>
-  );
+  return <NoTodoSelected />;
 }
