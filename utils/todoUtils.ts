@@ -14,3 +14,20 @@ export function priorityToText(priority: number): string {
 
   return priorityLabels[priority];
 }
+type PriorityVariant =
+  | 'default'
+  | 'lowestPriority'
+  | 'lowPriority'
+  | 'midPriority'
+  | 'highPriority'
+  | 'highestPriority';
+export function priorityToVarinat(priority: number): PriorityVariant {
+  const priorityLabels: Record<number, string> = {
+    1: 'lowestPriority',
+    2: 'lowPriority',
+    3: 'midPriority',
+    4: 'highPriority',
+    5: 'highestPriority',
+  };
+  return (priorityLabels[priority] as PriorityVariant) ?? 'default';
+}
