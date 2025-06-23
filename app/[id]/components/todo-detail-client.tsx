@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteTodo, updateTodo } from '@/app/actions/todo';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,13 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Spinner from '@/components/ui/spinner';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { priorityToText, priorityToVarinat } from '@/utils/todoUtils';
 import { Prisma, Todo } from '@prisma/client';
-import { Edit2, FilePlus } from 'lucide-react';
+import { Edit2, FilePlus, Save, Trash2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 type Props = {
   todo: Todo;
@@ -33,6 +35,9 @@ export function TodoDetailClient({ todo }: Props) {
   const [notes, setNotes] = useState(defaultNotes);
   const [priority, setPriority] = useState(String(todo.priority));
   const [isCompleted, setIsCompleted] = useState(todo.isCompleted);
+
+  const [isUpdatePending, startUpdateTransition] = useTransition();
+  const [isDeletePending, startDeleteTransition] = useTransition();
 
   const isTitleChanged = todo.title !== title;
   const isNotesChanged = defaultNotes !== notes;
@@ -53,50 +58,35 @@ export function TodoDetailClient({ todo }: Props) {
       notes: notes ?? null,
       priority: Number(priority),
     };
-    await fetch(`/api/todo/${todo.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-    });
 
-    // Refresh sever komponent
-    router.refresh();
+    startUpdateTransition(() => updateTodo(todo.id, payload));
   };
 
   const handleDeleteTodo = async () => {
-    await fetch(`/api/todo/${todo.id}`, {
-      method: 'DELETE',
-    });
+    startDeleteTransition(() => deleteTodo(todo.id));
+  };
 
-    // Refresh sever komponent
-    router.refresh(); // TODOvner nefunguje refresh a pak push, provede se jen push
-
-    // Redirect na homepage
+  const handleCancel = () => {
     router.push('/');
   };
 
   return (
-    <div>
+    <div className="px-2">
       {/* Title input */}
       <Input
         defaultValue={title}
         onChange={(e) => setTitle(e.target.value)}
+        placeholder="Zadej název todo..."
         className="mb-2"
       ></Input>
 
       {/* Notes textarea */}
       <Textarea
         defaultValue={todo.notes ?? ''}
-        placeholder="Napiš popis ke svému todo"
+        placeholder="Napiš popis ke svému todo..."
         className="mb-2"
         onChange={(e) => setNotes(e.target.value)}
       />
-
-      {/* Completed status switch */}
-      <div className="flex items-center gap-2 mb-2">
-        <span>Status</span>
-        <Switch defaultChecked={isCompleted} onCheckedChange={setIsCompleted} />
-        <p>{isCompleted ? 'Splněno' : 'Nesplněno'}</p>
-      </div>
 
       {/* Priority selection */}
       <div className="mb-2">
@@ -121,6 +111,13 @@ export function TodoDetailClient({ todo }: Props) {
         </Select>
       </div>
 
+      {/* Completed status switch */}
+      <div className="flex items-center gap-2 mb-2">
+        <span>Status</span>
+        <Switch defaultChecked={isCompleted} onCheckedChange={setIsCompleted} />
+        <p>{isCompleted ? 'Splněno' : 'Nesplněno'}</p>
+      </div>
+
       {/* Dates */}
       <div className="mb-2">
         {/* CreatedAt */}
@@ -140,11 +137,28 @@ export function TodoDetailClient({ todo }: Props) {
 
       {/* Buttons */}
       <div className="flex gap-1">
-        <Button onClick={handleUpdateTodo} disabled={!isDirty}>
+        {/* Save */}
+        <Button
+          onClick={handleUpdateTodo}
+          disabled={!isDirty || isUpdatePending}
+        >
+          {isUpdatePending ? <Spinner /> : <Save />}
           Uložit
         </Button>
-        <Button variant={'destructive'} onClick={handleDeleteTodo}>
+
+        {/* Delete */}
+        <Button
+          variant={'destructive'}
+          onClick={handleDeleteTodo}
+          disabled={isDeletePending}
+        >
+          {isDeletePending ? <Spinner /> : <Trash2 />}
           Smazat
+        </Button>
+
+        {/* Cancel */}
+        <Button variant="ghost" onClick={handleCancel}>
+          <X /> Zrušit
         </Button>
       </div>
     </div>

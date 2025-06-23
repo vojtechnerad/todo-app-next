@@ -1,3 +1,8 @@
+/*
+  API endoints are no longer used!
+  Instead I switched to server functions.
+*/
+
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';

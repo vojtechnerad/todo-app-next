@@ -5,8 +5,7 @@ type Props = {
   params: { id: string };
 };
 export default async function TodoDetail({ params }: Props) {
-  // TODOvner dělá problémy, chce await
-  const id = params.id;
+  const { id } = await params;
 
   const todo = await prisma.todo.findUnique({
     where: { id },

@@ -1,34 +1,34 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { Button } from '@/components/ui/button';
-export default function NoTodoSelected() {
-  const router = useRouter();
-  return (
-    <div>
-      <h2>Žádné todo nezvoleno</h2>
-      <p>Vyberte jej zleva</p>
-      <p>Nebo vytvořte nové</p>
-      <Button
-        onClick={async () => {
-          const response = await fetch('/api/todo', {
-            method: 'POST',
-            body: JSON.stringify({
-              title: 'Nové todo',
-            }),
-          });
+import { useTransition } from 'react';
+import Spinner from '@/components/ui/spinner';
+import { ArrowLeft, Plus } from 'lucide-react';
+import { addTodo } from '../actions/todo';
 
-          if (response.ok) {
-            const newTodo = await response.json();
-            router.refresh();
-            router.push(`/${newTodo.id}`);
-          } else {
-            // TODOvner
-          }
+export default function NoTodoSelected() {
+  const [isAddPending, setAddTransition] = useTransition();
+
+  return (
+    <div className="flex flex-col w-full items-center p-2 text-lg">
+      <h2 className="pb-4">Žádné todo nezvoleno</h2>
+
+      <p className="flex items-center pb-1">Vyberte existující v levém menu</p>
+
+      <div className="pb-4">
+        <ArrowLeft />
+      </div>
+
+      <p className="pb-1">Nebo vytvořte nové</p>
+      <Button
+        className="w-fit"
+        onClick={async () => {
+          setAddTransition(() => addTodo());
         }}
+        disabled={isAddPending}
       >
-        Vytvořit nové
+        {isAddPending ? <Spinner /> : <Plus />}
+        Přidat
       </Button>
     </div>
   );

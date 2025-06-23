@@ -9,7 +9,7 @@ export default async function TodoList() {
 
   return (
     <TodoFilterProvider>
-      <TodoListClient todos={todos} />{' '}
+      <TodoListClient todos={todos} />
     </TodoFilterProvider>
   );
 }

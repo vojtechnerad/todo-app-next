@@ -1,63 +1,67 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CheckIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
-import { priorityToText, priorityToVarinat } from '@/utils/todoUtils';
 import TodoToolbar from './todo-toolbar';
 import { Todo } from '@prisma/client';
 import { useTodoFilter } from '../context';
+import TodoCard from './todo-card';
+
 type Props = {
   todos: Array<Todo>;
 };
+
 export default function TodoListClient({ todos }: Props) {
-  const { query: filter, status } = useTodoFilter();
+  const {
+    query: filter,
+    status,
+    priorities,
+    isAnyFilterUsed,
+  } = useTodoFilter();
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
       const matchesTitle = todo.title
         .toLowerCase()
         .includes(filter.toLowerCase());
-      console.log(status);
+
       const matchesStatus = () => {
-        console.log(status);
         if (status === 'completed') return todo.isCompleted === true;
         if (status === 'pending') return todo.isCompleted === false;
         return true;
       };
 
-      return matchesTitle && matchesStatus();
+      const matchesPriority = () => {
+        // Skip if no priorities are selected
+        if (priorities.length == 0) return true;
+
+        return priorities.some(
+          (priority) => String(todo.priority) === priority,
+        );
+      };
+
+      return matchesTitle && matchesStatus() && matchesPriority();
     });
-  }, [filter, status, todos]);
+  }, [filter, status, priorities, todos]);
+
+  const shownTodosText = () => {
+    return `Celkem ${filteredTodos.length}${
+      isAnyFilterUsed ? ` (z ${todos.length})` : ''
+    } todos`;
+  };
 
   return (
     <>
-      {status}
       <TodoToolbar />
+
+      <span className="text-xs p-2 text-end">{shownTodosText()}</span>
+
       <div className="flex-grow overflow-auto">
         <ScrollArea className="h-full pr-2">
           {filteredTodos.map((todo) => (
             <Link key={todo.id} href={`/${todo.id}`}>
-              <Card className="mb-2">
-                <CardHeader>
-                  <CardTitle>{todo.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-1">
-                    {todo.isCompleted ? (
-                      <CheckIcon className="bg-green-700 rounded-full w-5 h-5 p-0.5" />
-                    ) : (
-                      <XIcon className="bg-destructive/60 rounded-full w-5 h-5 p-0.5" />
-                    )}
-                    <Badge variant={priorityToVarinat(todo.priority)}>
-                      {priorityToText(todo.priority)}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+              <TodoCard todo={todo} />
             </Link>
           ))}
         </ScrollArea>
