@@ -61,29 +61,31 @@ export default function TodoToolbar() {
       <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
         <CollapsibleContent className="p-2">
           {/* Searchbar */}
-          <div className="relative w-full max-w-sm pb-2">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2" />
+          <div className="pb-2">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2" />
 
-            <Input
-              type="text"
-              placeholder="Hledat úkoly..."
-              className="pl-10"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+              <Input
+                type="text"
+                placeholder="Hledat úkoly..."
+                className="pl-10"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
 
-            {/* Clear button, only if query is set */}
-            {query && (
-              <button
-                onClick={() => setQuery('')}
-                className={cn(
-                  'absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground',
-                  'transition-colors',
-                )}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
+              {/* Clear button, only if query is set */}
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  className={cn(
+                    'absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground',
+                    'transition-colors',
+                  )}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Priorities filter */}

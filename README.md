@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo app
 
-## Getting Started
+This project was created as part of the extracurricular course `4IT427 React.js Programming Basics` at university.
 
-First, run the development server:
+It's a simple Todo application built with Next.js and React, designed to help me practice in `React` framework, as well as to understand concepts of server side rendering using `Next.js`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+I also wanted to try the `shadcn/ui` library and their approach to generating components, as opposed to using predefined component libraries, which I'm more used to working with.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application stores data in a local `SQLite` database, managed through the `Prisma` ORM. Prisma provides a type-safe and developer-friendly way to interact with the database, making it easier to handle queries and maintain data consistency throughout the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Used technologies
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `Next.js` (App Router)
+- `React`
+- `Tailwind CSS` – for styling
+- `shadcn/ui` – for UI components
+- `Prisma` – for ORM
+- `SQLite` – as the database
+- `Prettier` – for code formatting
