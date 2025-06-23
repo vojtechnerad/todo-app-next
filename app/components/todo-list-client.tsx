@@ -7,6 +7,7 @@ import TodoToolbar from './todo-toolbar';
 import { Todo } from '@prisma/client';
 import { useTodoFilter } from '../context';
 import TodoCard from './todo-card';
+import { CircleAlert } from 'lucide-react';
 
 type Props = {
   todos: Array<Todo>;
@@ -64,6 +65,12 @@ export default function TodoListClient({ todos }: Props) {
               <TodoCard todo={todo} />
             </Link>
           ))}
+          {filteredTodos.length === 0 && (
+            <div className="bg-card text-card-foreground flex row gap-2 rounded-xl border p-2 shadow-sm items-center">
+              <CircleAlert className="text-yellow-500 w-5 h-5" /> Žádná todo
+              nenalezena
+            </div>
+          )}
         </ScrollArea>
       </div>
     </>
